@@ -9,10 +9,10 @@ import { ArticlesList } from './ArticlesList';
 @Entity({ name: 'author' })
 export class Author {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
-  article_count: string;
+  article_count: number;
   /**
    * base64
    */

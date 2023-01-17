@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { BlogModule } from './blog/blog.module';
 import { Author } from './typeorm/Author';
 import { ArticlesList } from './typeorm/ArticlesList';
+import { CMSModule } from './cms/cms.module';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -18,6 +20,7 @@ import { ArticlesList } from './typeorm/ArticlesList';
       synchronize: false,
     }),
     BlogModule,
+    CMSModule,
   ],
   controllers: [AppController],
   providers: [AppService],
