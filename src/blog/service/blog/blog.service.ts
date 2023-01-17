@@ -3,13 +3,25 @@ import { Injectable, HttpStatus, Catch } from '@nestjs/common';
 import { ArticlesList } from 'src/typeorm/ArticlesList';
 import { Repository } from 'typeorm';
 import { QueryArticlesList } from 'src/blog/dtos/QueryArticlesList.dto';
+import { Advertisement } from 'src/typeorm/advertisement';
+import { Author } from 'src/typeorm/Author';
+import { Category } from 'src/typeorm/Category';
+import { QueryArticle } from 'src/blog/dtos/QueryArticle.dto';
 
 @Injectable()
 @Catch()
 export class BlogService {
-  @InjectRepository(ArticlesList)
-  private articlesListService: Repository<ArticlesList>;
-
+  constructor(
+    @InjectRepository(ArticlesList)
+    private articlesListService: Repository<ArticlesList>,
+    @InjectRepository(Advertisement)
+    private advertisementService: Repository<Advertisement>,
+    @InjectRepository(Author)
+    private authorService: Repository<Author>,
+    @InjectRepository(Category)
+    private categoryService: Repository<Category>,
+  ) {}
+  // 文章列表
   async findArticlesList(articlesLists: QueryArticlesList) {
     const {
       label = 'all',
@@ -27,14 +39,13 @@ export class BlogService {
         case 'hot':
           query = query.orderBy('article.view_count', 'DESC');
           break;
-          //   case 'recommend':
-          //     query = query.where('article.isRecommend = :isRecommend', {
-          //       isRecommend: true,
-          //     });
+        case 'recommend':
+          query = query.orderBy('article.like_count', 'DESC');
           break;
         default:
           query = query.orderBy('article.time', 'DESC');
       }
+
       switch (label) {
         case 'all':
           break;
@@ -55,8 +66,88 @@ export class BlogService {
     } catch (error) {
       return {
         code: HttpStatus.BAD_REQUEST,
-        msg: '查询失败',
-        data: [],
+        msg: `查询失败${error.sqlMessage}`,
+        data: null,
+      };
+    }
+  }
+  // 查询广告
+  async findAdvertisementList() {
+    try {
+      const advertisementList = await this.advertisementService.find();
+      return {
+        code: HttpStatus.OK,
+        msg: '查询成功',
+        data: advertisementList,
+      };
+    } catch (error) {
+      return {
+        code: HttpStatus.BAD_REQUEST,
+        msg: `查询失败${error.sqlMessage}`,
+        data: null,
+      };
+    }
+  }
+  // 查询Top3作者
+  async findAuthorsRank() {
+    try {
+      const top3Author = await this.authorService
+        .createQueryBuilder('author')
+        .orderBy('CAST(author.article_count as SIGNED)', 'DESC')
+        .take(3)
+        .getMany();
+      return {
+        code: HttpStatus.OK,
+        msg: '查询成功',
+        data: top3Author,
+      };
+    } catch (error) {
+      return {
+        code: HttpStatus.BAD_REQUEST,
+        msg: `查询失败${error.sqlMessage}`,
+        data: null,
+      };
+    }
+  }
+  // 分类
+  async findCategory() {
+    try {
+      const category = await this.categoryService
+        .createQueryBuilder('category')
+        .leftJoinAndSelect('category.labels', 'label')
+        .getMany();
+      return {
+        code: HttpStatus.OK,
+        msg: '查询成功',
+        data: category,
+      };
+    } catch (error) {
+      return {
+        code: HttpStatus.BAD_REQUEST,
+        msg: `查询失败${error.sqlMessage}`,
+        data: null,
+      };
+    }
+  }
+
+  // 根据id找文章
+  async findOneArticle(params: QueryArticle) {
+    try {
+      const article = await this.articlesListService
+        .createQueryBuilder('article')
+        .where('article.id = :id', { id: params.id })
+        .leftJoinAndSelect('article.author', 'author')
+        .getOne();
+      return {
+        code: HttpStatus.OK,
+        msg: '查询成功',
+        data: article,
+      };
+    } catch (error) {
+      return {
+        code: HttpStatus.BAD_REQUEST,
+        msg: `查询失败${error.sqlMessage}`,
+        data: null,
       };
     }
   }

@@ -1,4 +1,4 @@
-import { Column, PrimaryGeneratedColumn, Entity, ManyToOne } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, OneToMany } from 'typeorm';
 import { ArticlesList } from './ArticlesList';
 
 /**
@@ -25,6 +25,6 @@ export class Author {
   @Column()
   username: string;
 
-  @ManyToOne(() => ArticlesList, (articlesList) => articlesList.author)
+  @OneToMany(() => ArticlesList, (articlesList) => articlesList.author)
   articlesLists: ArticlesList[];
 }
