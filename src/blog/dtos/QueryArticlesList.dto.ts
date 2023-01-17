@@ -1,4 +1,3 @@
-
 export class QueryArticlesList {
   size: number;
   page: number;
