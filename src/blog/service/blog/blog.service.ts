@@ -7,9 +7,9 @@ import { Advertisement } from 'src/typeorm/advertisement';
 import { Author } from 'src/typeorm/Author';
 import { Category } from 'src/typeorm/Category';
 import { QueryArticle } from 'src/blog/dtos/QueryArticle.dto';
+import { RouterList } from 'src/typeorm/RouterList';
 
 @Injectable()
-@Catch()
 export class BlogService {
   constructor(
     @InjectRepository(ArticlesList)
@@ -20,12 +20,15 @@ export class BlogService {
     private authorService: Repository<Author>,
     @InjectRepository(Category)
     private categoryService: Repository<Category>,
+    @InjectRepository(RouterList)
+    private routerService: Repository<RouterList>,
   ) {}
   // 文章列表
   async findArticlesList(articlesLists: QueryArticlesList) {
     const {
       label = 'all',
-      type = 'newest',
+      subtab = 'all',
+      type = 'recommend',
       page = 1,
       size = 20,
     } = articlesLists;
@@ -43,7 +46,7 @@ export class BlogService {
           query = query.orderBy('article.like_count', 'DESC');
           break;
         default:
-          query = query.orderBy('article.time', 'DESC');
+          query = query.orderBy('article.like_count', 'DESC');
       }
 
       switch (label) {
@@ -53,17 +56,35 @@ export class BlogService {
           query = query.where('article.label = :label', { label });
           break;
       }
+      switch (subtab) {
+        case 'all':
+          break;
+        default:
+          query = query.where('article.sub_tabs like :sub_tabs', {
+            sub_tabs: `%${subtab}%`,
+          });
+
+          break;
+      }
       const [articles, total] = await query
         .leftJoinAndSelect('article.author', 'author')
         .skip((page - 1) * size)
         .take(size)
         .getManyAndCount();
+
+      articles.forEach((item) => {
+        (item.sub_tabs as any) = item.sub_tabs
+          ?.split(',')
+          .filter((tab) => tab !== '');
+        return item;
+      });
       return {
         code: HttpStatus.OK,
         msg: '查询成功',
         data: articles,
       };
     } catch (error) {
+      console.log(error);
       return {
         code: HttpStatus.BAD_REQUEST,
         msg: `查询失败${error.sqlMessage}`,
@@ -133,15 +154,43 @@ export class BlogService {
   // 根据id找文章
   async findOneArticle(params: QueryArticle) {
     try {
-      const article = await this.articlesListService
-        .createQueryBuilder('article')
+      const article = await this.articlesListService.createQueryBuilder(
+        'article',
+      );
+
+      const pointArticle = await article
         .where('article.id = :id', { id: params.id })
         .leftJoinAndSelect('article.author', 'author')
         .getOne();
+
+      const recommendArticle = await article
+        .where('article.label = :label', { label: pointArticle.label })
+        .andWhere('article.id != :id', { id: params.id })
+        .orderBy('article.view_count', 'DESC')
+        .take(10)
+        .getMany();
+
       return {
         code: HttpStatus.OK,
         msg: '查询成功',
-        data: article,
+        data: { ...pointArticle, related_articles: recommendArticle },
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        code: HttpStatus.BAD_REQUEST,
+        msg: `查询失败${error.sqlMessage}`,
+        data: null,
+      };
+    }
+  }
+  async findRouteList() {
+    try {
+      const routes = await this.routerService.find();
+      return {
+        code: HttpStatus.OK,
+        msg: `查询成功`,
+        data: routes,
       };
     } catch (error) {
       return {

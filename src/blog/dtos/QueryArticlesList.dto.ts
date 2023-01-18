@@ -3,4 +3,5 @@ export class QueryArticlesList {
   page: number;
   label: string;
   type: string;
+  subtab: string;
 }

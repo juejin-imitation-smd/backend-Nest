@@ -1,8 +1,11 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/AuthGuard';
 import { QueryArticle } from 'src/blog/dtos/QueryArticle.dto';
 import { QueryArticlesList } from 'src/blog/dtos/QueryArticlesList.dto';
 import { BlogService } from 'src/blog/service/blog/blog.service';
+
+@UseGuards(AuthGuard)
 @Controller('api')
 export class BlogController {
   constructor(private blogService: BlogService) {}
@@ -10,8 +13,9 @@ export class BlogController {
   @Get('getArticles')
   @ApiQuery({ name: 'size', type: Number, required: true })
   @ApiQuery({ name: 'page', type: Number, required: true })
-  @ApiQuery({ name: 'label', type: String, required: true })
-  @ApiQuery({ name: 'type', type: String, required: true })
+  @ApiQuery({ name: 'subtab', type: String })
+  @ApiQuery({ name: 'label', type: String })
+  @ApiQuery({ name: 'type', type: String })
   findArticlesList(@Query() queryListParams: QueryArticlesList) {
     return this.blogService.findArticlesList(queryListParams);
   }
@@ -38,5 +42,11 @@ export class BlogController {
   @ApiQuery({ name: 'id', type: Number, required: true })
   getArticle(@Query() queryArticleParams: QueryArticle) {
     return this.blogService.findOneArticle(queryArticleParams);
+  }
+
+  //获取路由列表
+  @Get('getroutes')
+  getRouteList() {
+    return this.blogService.findRouteList();
   }
 }
