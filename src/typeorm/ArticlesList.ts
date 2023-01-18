@@ -1,11 +1,17 @@
-import { Column, PrimaryGeneratedColumn, Entity, ManyToOne } from 'typeorm';
+import {
+  Column,
+  PrimaryGeneratedColumn,
+  Entity,
+  ManyToOne,
+  AfterLoad,
+} from 'typeorm';
 import { Author } from './Author';
 /**
  * 首页列表内文章item
  */
 @Entity({ name: 'articlesList' })
 export class ArticlesList {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: string;
   /**
    * 作者详情
@@ -35,7 +41,7 @@ export class ArticlesList {
   /**
    * 点赞数
    */
-  @Column({ default: 18 })
+  @Column()
   like_count: number;
   /**
    * 时间戳
@@ -52,4 +58,9 @@ export class ArticlesList {
    */
   @Column()
   view_count: number;
+  /**
+   * 子标签
+   */
+  @Column()
+  sub_tabs: string;
 }
