@@ -16,7 +16,7 @@ export class ArticlesList {
    * 评论数
    */
   @Column()
-  comment_count: string;
+  comment_count: number;
   /**
    * 正文内容的前100字
    */
@@ -36,7 +36,7 @@ export class ArticlesList {
    * 点赞数
    */
   @Column({ default: 18 })
-  like_count: string;
+  like_count: number;
   /**
    * 时间戳
    */
@@ -51,5 +51,5 @@ export class ArticlesList {
    * 阅读数
    */
   @Column()
-  view_count: string;
+  view_count: number;
 }

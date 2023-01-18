@@ -5,9 +5,11 @@ import { AppService } from './app.service';
 import { BlogModule } from './blog/blog.module';
 import { Author } from './typeorm/Author';
 import { ArticlesList } from './typeorm/ArticlesList';
+import { CMSModule } from './cms/cms.module';
 import { Advertisement } from './typeorm/advertisement';
 import { Label } from './typeorm/Label';
 import { Category } from './typeorm/Category';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -21,6 +23,7 @@ import { Category } from './typeorm/Category';
       synchronize: false,
     }),
     BlogModule,
+    CMSModule,
   ],
   controllers: [AppController],
   providers: [AppService],
