@@ -9,6 +9,9 @@ import { CMSModule } from './cms/cms.module';
 import { Advertisement } from './typeorm/advertisement';
 import { Label } from './typeorm/Label';
 import { Category } from './typeorm/Category';
+import { RouterList } from './typeorm/RouterList';
+import { UserModule } from './user/user.module';
+import { User } from './typeorm/User';
 
 @Module({
   imports: [
@@ -18,12 +21,21 @@ import { Category } from './typeorm/Category';
       port: 3306,
       username: 'root',
       password: '12345678910',
-      entities: [Label, Category, Advertisement, Author, ArticlesList],
+      entities: [
+        RouterList,
+        Label,
+        Category,
+        Advertisement,
+        Author,
+        ArticlesList,
+        User,
+      ],
       database: 'nuggetblog',
       synchronize: false,
     }),
     BlogModule,
     CMSModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
