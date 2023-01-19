@@ -16,7 +16,13 @@ export class Author {
   /**
    * base64
    */
-  @Column()
+  @Column({
+    type: 'longblob',
+    transformer: {
+      to: (value: string) => Buffer.from(value),
+      from: (value: Buffer) => value.toString(),
+    },
+  })
   avatar: string;
 
   @Column()

@@ -5,8 +5,8 @@ import { Author } from './Author';
  */
 @Entity({ name: 'articlesList' })
 export class ArticlesList {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
   /**
    * 作者详情
    */
@@ -25,7 +25,14 @@ export class ArticlesList {
   /**
    * baae64
    */
-  @Column({ nullable: true })
+  @Column({
+    type: 'longblob',
+    nullable: true,
+    transformer: {
+      to: (value: string) => Buffer.from(value),
+      from: (value: Buffer | null) => (value ? value.toString() : null),
+    },
+  })
   image: string;
   /**
    * 标签（分区）
