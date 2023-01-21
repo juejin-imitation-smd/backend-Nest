@@ -39,11 +39,31 @@ export class BlogService {
         case 'newest':
           query = query.orderBy('article.time', 'DESC');
           break;
-        case 'hot':
+        case 'hottest':
           query = query.orderBy('article.view_count', 'DESC');
           break;
         case 'recommend':
           query = query.orderBy('article.like_count', 'DESC');
+        case 'three_days_hottest':
+          query = query
+            .where('article.time >= :time', {
+              time: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+            })
+            .orderBy('article.view_count', 'DESC');
+          break;
+        case 'weekly_hottest':
+          query = query
+            .where('article.time >= :time', {
+              time: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+            })
+            .orderBy('article.view_count', 'DESC');
+          break;
+        case 'monthly_hottest':
+          query = query
+            .where('article.time >= :time', {
+              time: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+            })
+            .orderBy('article.view_count', 'DESC');
           break;
         default:
           query = query.orderBy('article.like_count', 'DESC');
