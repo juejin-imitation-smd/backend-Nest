@@ -7,7 +7,7 @@ import { Label } from './Label';
 @Entity({ name: 'category' })
 export class Category {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   name: string;

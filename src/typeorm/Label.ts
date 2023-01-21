@@ -7,11 +7,13 @@ import { Category } from './Category';
 @Entity({ name: 'label' })
 export class Label {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   label: string;
 
-  @ManyToOne(() => Category, (category) => category.labels)
+  @ManyToOne(() => Category, (category) => category.labels, {
+    cascade: true,
+  })
   category: Category;
 }
