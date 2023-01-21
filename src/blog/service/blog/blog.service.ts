@@ -24,14 +24,14 @@ export class BlogService {
     private routerService: Repository<RouterList>,
   ) {}
   // 文章列表
-  async findArticlesList(articlesLists: QueryArticlesList) {
+  async findArticlesList(articles: QueryArticlesList) {
     const {
       label = 'all',
       subtab = 'all',
       type = 'recommend',
       page = 1,
       size = 20,
-    } = articlesLists;
+    } = articles;
 
     try {
       let query = this.articlesListService.createQueryBuilder('article');

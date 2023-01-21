@@ -32,5 +32,5 @@ export class Author {
   username: string;
 
   @OneToMany(() => ArticlesList, (articlesList) => articlesList.author)
-  articlesLists: ArticlesList[];
+  articles: ArticlesList[];
 }

@@ -13,5 +13,5 @@ export class UpdateAuthorDto {
   readonly description: string;
   readonly avatar: string; // base64
   readonly article_count: number;
-  readonly articlesLists: ArticlesList[]; // base64
+  readonly articles: ArticlesList[]; // base64
 }

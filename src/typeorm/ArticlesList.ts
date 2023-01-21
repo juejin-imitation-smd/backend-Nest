@@ -16,7 +16,7 @@ export class ArticlesList {
   /**
    * 作者详情
    */
-  @ManyToOne(() => Author, (author) => author.articlesLists)
+  @ManyToOne(() => Author, (author) => author.articles)
   author: Author;
   /**
    * 评论数

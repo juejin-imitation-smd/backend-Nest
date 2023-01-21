@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpStatus,
+  Param,
   Post,
   Put,
   Query,
@@ -19,22 +20,28 @@ export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
 
   @Get()
-  async findRange(@Query() paginationQuery) {
+  async findAll(@Query() paginationQuery) {
     const { size, page } = paginationQuery;
-    const list = await this.authorsService.findRange(page, size);
+    const [list, total] = await this.authorsService.findAll(page, size);
     return {
       code: 200,
       msg: 'ok',
-      data: { list, total: list.length },
+      data: { list, total },
     };
   }
 
-  async findOne(id: number) {
+  @Get(':id')
+  async findOne(@Param() params: { id: number }) {
+    const { id } = params;
     const author = await this.authorsService.findOne(id);
     return {
       code: author ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
       msg: author ? 'ok' : 'invalid id',
-      data: null,
+      data: author
+        ? {
+            author,
+          }
+        : null,
     };
   }
 

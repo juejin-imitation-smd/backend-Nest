@@ -8,6 +8,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { PaginationQuery } from 'src/cms/common/dto/pagination-query.dto';
 import { CreateAdvertisementDto } from 'src/cms/dto/advertisements/create-advertisement.dto';
 import { UpdateAdvertisementDto } from 'src/cms/dto/advertisements/update-advertisement.dto';
 import { AdvertisementsService } from 'src/cms/services/advertisements/advertisements.service';
@@ -17,14 +18,14 @@ export class AdvertisementsController {
   constructor(private readonly advertisementService: AdvertisementsService) {}
 
   @Get('getAdvertisements')
-  async findRange(@Query() paginationQuery) {
+  async findAll(@Query() paginationQuery: PaginationQuery) {
     const { page, size } = paginationQuery;
-    const list = await this.advertisementService.findRange(page, size);
+    const [list, total] = await this.advertisementService.findAll(page, size);
 
     return {
       code: HttpStatus.OK,
       msg: 'ok',
-      data: { list, total: list.length },
+      data: { list, total },
     };
   }
 
