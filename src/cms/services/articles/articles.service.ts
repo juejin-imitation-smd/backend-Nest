@@ -38,6 +38,7 @@ export class ArticlesService {
     if (existingAuthor) {
       const newArticle = this.articlesRepository.create({
         ...createArticlesDto,
+        sub_tabs: createArticlesDto.sub_tabs.join(','),
         author: existingAuthor,
       });
       return this.articlesRepository.save(newArticle);

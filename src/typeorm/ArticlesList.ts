@@ -67,6 +67,7 @@ export class ArticlesList {
   view_count: number;
   /**
    * 子标签
+   * 数组以字符串形式存储( 插入 "," )
    */
   @Column()
   sub_tabs: string;

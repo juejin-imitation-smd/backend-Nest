@@ -81,7 +81,9 @@ export class BlogService {
       return {
         code: HttpStatus.OK,
         msg: '查询成功',
-        data: articles,
+        data: {
+          list: articles,
+        },
       };
     } catch (error) {
       console.log(error);
