@@ -16,7 +16,7 @@ export class ArticlesList {
   /**
    * 作者详情
    */
-  @ManyToOne(() => Author, (author) => author.articlesLists)
+  @ManyToOne(() => Author, (author) => author.articles)
   author: Author;
   /**
    * 评论数
@@ -67,6 +67,7 @@ export class ArticlesList {
   view_count: number;
   /**
    * 子标签
+   * 数组以字符串形式存储( 插入 "," )
    */
   @Column()
   sub_tabs: string;
