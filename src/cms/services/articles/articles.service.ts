@@ -15,12 +15,19 @@ export class ArticlesService {
     private readonly authorsRepository: Repository<Author>,
   ) {}
 
-  findAll(page: number, size: number) {
-    return this.articlesRepository.findAndCount({
+  async findAll(page: number, size: number) {
+    const [list, total] = await this.articlesRepository.findAndCount({
       skip: size * (page - 1),
       take: size,
       relations: ['author'],
     });
+    (list as any).forEach(
+      (item) =>
+        (item.sub_tabs = item.sub_tabs
+          .split(',')
+          .filter((item) => item !== '')),
+    );
+    return [list, total];
   }
 
   findOne(id: number) {
