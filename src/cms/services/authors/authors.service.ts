@@ -13,7 +13,7 @@ export class AuthorsService {
     private readonly articlesReposity: Repository<ArticlesList>,
   ) {}
 
-  create(author: Omit<Author, 'id' | 'articlesLists'>) {
+  create(author: Omit<Author, 'id' | 'articles'>) {
     const newAuthor = this.authorRepository.create(author);
     return this.authorRepository.save(newAuthor);
   }
@@ -29,15 +29,23 @@ export class AuthorsService {
     else return null;
   }
 
-  async findRange(page: number, size: number) {
-    return this.authorRepository.find({
+  async findAll(page: number, size: number) {
+    return this.authorRepository.findAndCount({
       skip: size * (page - 1),
       take: size,
     });
   }
 
   async findOne(id: number) {
-    const author = await this.authorRepository.findOne({ where: { id } });
+    const author = (await this.authorRepository.findOne({
+      where: { id },
+      relations: ['articles'],
+    })) as any;
+    author.articles.forEach((item) => {
+      delete item.content;
+      delete item.image;
+      item.sub_tabs = item.sub_tabs.split(',').filter((item) => item !== '');
+    });
     return author;
   }
 

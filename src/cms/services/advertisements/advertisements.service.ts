@@ -10,8 +10,8 @@ export class AdvertisementsService {
     private readonly advertisementRespository: Repository<Advertisement>,
   ) {}
 
-  findRange(page: number, size: number) {
-    return this.advertisementRespository.find({
+  findAll(page: number, size: number) {
+    return this.advertisementRespository.findAndCount({
       skip: size * (page - 1),
       take: size,
     });
