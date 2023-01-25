@@ -5,7 +5,7 @@ import { QueryArticle } from 'src/blog/dtos/QueryArticle.dto';
 import { QueryArticlesList } from 'src/blog/dtos/QueryArticlesList.dto';
 import { BlogService } from 'src/blog/service/blog/blog.service';
 
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller('api')
 export class BlogController {
   constructor(private blogService: BlogService) {}

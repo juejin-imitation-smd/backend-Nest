@@ -4,7 +4,7 @@ import { AuthorsService } from './services/authors/authors.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Author } from 'src/typeorm/Author';
 import { AdvertisementsService } from './services/advertisements/advertisements.service';
-import { Advertisement } from 'src/typeorm/advertisement';
+import { Advertisement } from 'src/typeorm/Advertisement';
 import { AdvertisementsController } from './controllers/advertisements/advertisements.controller';
 import { ArticlesService } from './services/articles/articles.service';
 import { ArticlesController } from './controllers/articles/articles.controller';

@@ -3,7 +3,7 @@ import { Injectable, HttpStatus, Catch } from '@nestjs/common';
 import { ArticlesList } from 'src/typeorm/ArticlesList';
 import { Repository } from 'typeorm';
 import { QueryArticlesList } from 'src/blog/dtos/QueryArticlesList.dto';
-import { Advertisement } from 'src/typeorm/advertisement';
+import { Advertisement } from 'src/typeorm/Advertisement';
 import { Author } from 'src/typeorm/Author';
 import { Category } from 'src/typeorm/Category';
 import { QueryArticle } from 'src/blog/dtos/QueryArticle.dto';
