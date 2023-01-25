@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Advertisement } from 'src/typeorm/advertisement';
+import { Advertisement } from 'src/typeorm/Advertisement';
 import { ArticlesList } from 'src/typeorm/ArticlesList';
 import { Author } from 'src/typeorm/Author';
 import { Category } from 'src/typeorm/Category';

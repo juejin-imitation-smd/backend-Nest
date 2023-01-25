@@ -11,7 +11,13 @@ export class Advertisement {
   /**
    * base64
    */
-  @Column()
+  @Column({
+    type: "longblob",
+    transformer: {
+      to: (value: string) => Buffer.from(value),
+      from: (value: Buffer) => value.toString()
+    }
+  })
   image: string;
   @Column()
   title: string;

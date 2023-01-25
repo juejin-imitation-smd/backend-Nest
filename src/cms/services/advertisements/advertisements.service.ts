@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Advertisement } from 'src/typeorm/advertisement';
+import { Advertisement } from 'src/typeorm/Advertisement';
 import { Repository } from 'typeorm';
 
 @Injectable()

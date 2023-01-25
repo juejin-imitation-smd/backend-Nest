@@ -11,6 +11,10 @@ export class Category {
 
   @Column()
   name: string;
+
+  @Column()
+  url: string;
+
   @OneToMany(() => Label, (label) => label.category)
   labels: Label[];
 }
