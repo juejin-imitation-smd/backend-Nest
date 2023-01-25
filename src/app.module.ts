@@ -6,7 +6,7 @@ import { BlogModule } from './blog/blog.module';
 import { Author } from './typeorm/Author';
 import { ArticlesList } from './typeorm/ArticlesList';
 import { CMSModule } from './cms/cms.module';
-import { Advertisement } from './typeorm/advertisement';
+import { Advertisement } from './typeorm/Advertisement';
 import { Label } from './typeorm/Label';
 import { Category } from './typeorm/Category';
 import { RouterList } from './typeorm/RouterList';

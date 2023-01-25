@@ -14,6 +14,8 @@ export class RouterList {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   label: string;
 }
