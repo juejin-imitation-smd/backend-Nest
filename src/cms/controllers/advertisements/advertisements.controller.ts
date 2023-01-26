@@ -54,13 +54,13 @@ export class AdvertisementsController {
 
   @Post('advertisement')
   async create(@Body() createAdvertisementDto: CreateAdvertisementDto) {
-    const { id } = await this.advertisementService.create(
+    const newAd = await this.advertisementService.create(
       createAdvertisementDto,
     );
     return {
-      code: HttpStatus.OK,
-      msg: 'ok',
-      data: { id },
+      code: newAd ? HttpStatus.OK : HttpStatus.BAD_REQUEST,
+      msg: newAd ? 'ok' : 'cannot find author',
+      data: newAd ? { id: newAd } : null,
     };
   }
 
