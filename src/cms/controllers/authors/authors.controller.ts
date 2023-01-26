@@ -13,6 +13,7 @@ import {
   CreateAuthorDto,
   UpdateAuthorDto,
 } from 'src/cms/dto/authors/create-author.dto';
+import { FindAllAuthorDto } from 'src/cms/dto/authors/find-author.dto';
 import { AuthorsService } from 'src/cms/services/authors/authors.service';
 
 @Controller('api/cms/author')
@@ -20,9 +21,8 @@ export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
 
   @Get()
-  async findAll(@Query() paginationQuery) {
-    const { size, page } = paginationQuery;
-    const [list, total] = await this.authorsService.findAll(page, size);
+  async findAll(@Query() findAllAuthorDto: FindAllAuthorDto) {
+    const [list, total] = await this.authorsService.findAll(findAllAuthorDto);
     return {
       code: 200,
       msg: 'ok',
