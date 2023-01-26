@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateAdvertisementDto } from 'src/cms/dto/advertisements/create-advertisement.dto';
 import { FindAllAdvertisementDto } from 'src/cms/dto/advertisements/find-advertisement.dto';
 import { UpdateAdvertisementDto } from 'src/cms/dto/advertisements/update-advertisement.dto';
-import { Advertisement } from 'src/typeorm/Advertisement';
 import { Author } from 'src/typeorm/Author';
 import { Like, Repository } from 'typeorm';
+import { Advertisement } from 'src/typeorm/Advertisement';
 
 @Injectable()
 export class AdvertisementsService {
