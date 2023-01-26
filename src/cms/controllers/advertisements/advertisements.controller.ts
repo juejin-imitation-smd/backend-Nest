@@ -8,8 +8,8 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { PaginationQuery } from 'src/cms/common/dto/pagination-query.dto';
 import { CreateAdvertisementDto } from 'src/cms/dto/advertisements/create-advertisement.dto';
+import { FindAllAdvertisementDto } from 'src/cms/dto/advertisements/find-advertisement.dto';
 import { UpdateAdvertisementDto } from 'src/cms/dto/advertisements/update-advertisement.dto';
 import { AdvertisementsService } from 'src/cms/services/advertisements/advertisements.service';
 
@@ -18,9 +18,10 @@ export class AdvertisementsController {
   constructor(private readonly advertisementService: AdvertisementsService) {}
 
   @Get('getAdvertisements')
-  async findAll(@Query() paginationQuery: PaginationQuery) {
-    const { page, size } = paginationQuery;
-    const [list, total] = await this.advertisementService.findAll(page, size);
+  async findAll(@Query() findAllAdvertisementDto: FindAllAdvertisementDto) {
+    const [list, total] = await this.advertisementService.findAll(
+      findAllAdvertisementDto,
+    );
 
     return {
       code: HttpStatus.OK,

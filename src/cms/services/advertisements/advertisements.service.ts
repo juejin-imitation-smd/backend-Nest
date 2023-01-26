@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { FindAllAdvertisementDto } from 'src/cms/dto/advertisements/find-advertisement.dto';
 import { Advertisement } from 'src/typeorm/Advertisement';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class AdvertisementsService {
@@ -10,10 +11,12 @@ export class AdvertisementsService {
     private readonly advertisementRespository: Repository<Advertisement>,
   ) {}
 
-  findAll(page: number, size: number) {
+  findAll(findAllAdvertisementDto: FindAllAdvertisementDto) {
+    const { page, size, title } = findAllAdvertisementDto;
     return this.advertisementRespository.findAndCount({
       skip: size * (page - 1),
       take: size,
+      where: { title: Like(`%${title}%`) },
     });
   }
 

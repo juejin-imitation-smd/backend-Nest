@@ -8,8 +8,8 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { PaginationQuery } from 'src/cms/common/dto/pagination-query.dto';
 import { CreateArticlesDto } from 'src/cms/dto/articles/create-article.dto';
+import { FindAllAtricleDto } from 'src/cms/dto/articles/find-article.dto';
 import { UpdateArticleDto } from 'src/cms/dto/articles/update-article.dto';
 import { ArticlesService } from 'src/cms/services/articles/articles.service';
 
@@ -18,9 +18,8 @@ export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
   @Get('getArticles')
-  async findAll(@Query() paginationQuery: PaginationQuery) {
-    const { page, size } = paginationQuery;
-    const [list, total] = await this.articlesService.findAll(page, size);
+  async findAll(@Query() findAllAtricleDto: FindAllAtricleDto) {
+    const [list, total] = await this.articlesService.findAll(findAllAtricleDto);
     return {
       code: HttpStatus.OK,
       msg: 'ok',
