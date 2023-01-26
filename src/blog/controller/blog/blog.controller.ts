@@ -38,7 +38,7 @@ export class BlogController {
   }
 
   //获取所有类别，以及每类中标签
-  @Get('getArticle')
+  @Get('article')
   @ApiQuery({ name: 'id', type: Number, required: true })
   getArticle(@Query() queryArticleParams: QueryArticle) {
     return this.blogService.findOneArticle(queryArticleParams);
