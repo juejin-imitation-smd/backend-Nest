@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateAdvertisementDto } from 'src/cms/dto/advertisements/create-advertisement.dto';
 import { FindAllAdvertisementDto } from 'src/cms/dto/advertisements/find-advertisement.dto';
+import { UpdateAdvertisementDto } from 'src/cms/dto/advertisements/update-advertisement.dto';
 import { Advertisement } from 'src/typeorm/Advertisement';
+import { Author } from 'src/typeorm/Author';
 import { Like, Repository } from 'typeorm';
 
 @Injectable()
@@ -9,6 +12,8 @@ export class AdvertisementsService {
   constructor(
     @InjectRepository(Advertisement)
     private readonly advertisementRespository: Repository<Advertisement>,
+    @InjectRepository(Author)
+    private readonly authorsRespository: Repository<Author>,
   ) {}
 
   findAll(findAllAdvertisementDto: FindAllAdvertisementDto) {
@@ -25,15 +30,32 @@ export class AdvertisementsService {
     return ad;
   }
 
-  create(advertisement: Omit<Advertisement, 'id'>) {
-    const newAd = this.advertisementRespository.create(advertisement);
-    return this.advertisementRespository.save(newAd);
+  async create(createAdvertisementDto: CreateAdvertisementDto) {
+    const { author_id: id } = createAdvertisementDto;
+    const existingAuthor = await this.authorsRespository.findOne({
+      where: { id },
+    });
+    if (existingAuthor) {
+      const newAd = this.advertisementRespository.create({
+        ...createAdvertisementDto,
+        author: existingAuthor,
+      });
+      return this.advertisementRespository.save(newAd);
+    } else return null;
   }
 
-  async update(ad: Advertisement) {
-    const newAd = await this.advertisementRespository.preload(ad);
-    if (newAd) return this.advertisementRespository.save(newAd);
-    else return null;
+  async update(updateAdvertisementDto: UpdateAdvertisementDto) {
+    const { author_id: id } = updateAdvertisementDto;
+    const existingAuthor = await this.authorsRespository.findOne({
+      where: { id },
+    });
+    if (existingAuthor) {
+      const newAd = await this.advertisementRespository.preload({
+        ...updateAdvertisementDto,
+        author: existingAuthor,
+      });
+      return this.advertisementRespository.save(newAd);
+    } else return null;
   }
 
   async delete(id: number) {
