@@ -8,7 +8,6 @@ import { Label } from 'src/typeorm/Label';
 import { RouterList } from 'src/typeorm/RouterList';
 import { BlogController } from './controller/blog/blog.controller';
 import { BlogService } from './service/blog/blog.service';
-
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -19,6 +18,7 @@ import { BlogService } from './service/blog/blog.service';
       ArticlesList,
       RouterList,
     ]),
+
   ],
   controllers: [BlogController],
   providers: [BlogService],
