@@ -11,7 +11,9 @@ export class Advertisement {
   @Column()
   title: string;
 
-  @Column()
+  @Column({
+    type: 'text',
+  })
   content: string;
 
   /**
@@ -26,7 +28,16 @@ export class Advertisement {
   })
   image: string;
 
-  @Column()
+  @Column({
+    transformer: {
+      to: (time: string) => {
+        return new Date(parseInt(time));
+      },
+      from: (time: Date) => {
+        return time.getTime().toString();
+      },
+    },
+  })
   time: Date;
 
   @ManyToOne(() => Author, (author) => author.articles)
