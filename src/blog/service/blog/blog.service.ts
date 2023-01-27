@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable, HttpStatus, Catch } from '@nestjs/common';
+import { Injectable, HttpStatus, Catch, HttpException } from '@nestjs/common';
 import { ArticlesList } from 'src/typeorm/ArticlesList';
 import { Repository } from 'typeorm';
 import { QueryArticlesList } from 'src/blog/dtos/QueryArticlesList.dto';
@@ -109,7 +109,7 @@ export class BlogService {
       console.log(error);
       return {
         code: HttpStatus.BAD_REQUEST,
-        msg: `查询失败${error.sqlMessage}`,
+        msg: new HttpException(error, HttpStatus.BAD_REQUEST).message,
         data: null,
       };
     }
@@ -117,7 +117,9 @@ export class BlogService {
   // 查询广告
   async findAdvertisementList() {
     try {
-      const advertisementList = await this.advertisementService.find();
+      const advertisementList = await this.advertisementService.find({
+        relations: ['author'],
+      });
       return {
         code: HttpStatus.OK,
         msg: '查询成功',
@@ -126,7 +128,7 @@ export class BlogService {
     } catch (error) {
       return {
         code: HttpStatus.BAD_REQUEST,
-        msg: `查询失败${error.sqlMessage}`,
+        msg: new HttpException(error, HttpStatus.BAD_REQUEST).message,
         data: null,
       };
     }
@@ -147,7 +149,7 @@ export class BlogService {
     } catch (error) {
       return {
         code: HttpStatus.BAD_REQUEST,
-        msg: `查询失败${error.sqlMessage}`,
+        msg: new HttpException(error, HttpStatus.BAD_REQUEST).message,
         data: null,
       };
     }
@@ -167,7 +169,7 @@ export class BlogService {
     } catch (error) {
       return {
         code: HttpStatus.BAD_REQUEST,
-        msg: `查询失败${error.sqlMessage}`,
+        msg: new HttpException(error, HttpStatus.BAD_REQUEST).message,
         data: null,
       };
     }
@@ -201,7 +203,7 @@ export class BlogService {
       console.log(error);
       return {
         code: HttpStatus.BAD_REQUEST,
-        msg: `查询失败${error.sqlMessage}`,
+        msg: new HttpException(error, HttpStatus.BAD_REQUEST).message,
         data: null,
       };
     }
@@ -217,7 +219,7 @@ export class BlogService {
     } catch (error) {
       return {
         code: HttpStatus.BAD_REQUEST,
-        msg: `查询失败${error.sqlMessage}`,
+        msg: new HttpException(error, HttpStatus.BAD_REQUEST).message,
         data: null,
       };
     }
