@@ -22,11 +22,15 @@ export class AdvertisementsService {
       skip: size * (page - 1),
       take: size,
       where: { title: Like(`%${title}%`) },
+      relations: ['author'],
     });
   }
 
   findOne(id: number) {
-    const ad = this.advertisementRespository.findOne({ where: { id } });
+    const ad = this.advertisementRespository.findOne({
+      where: { id },
+      relations: ['author'],
+    });
     return ad;
   }
 

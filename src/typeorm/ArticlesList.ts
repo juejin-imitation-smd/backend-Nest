@@ -26,7 +26,9 @@ export class ArticlesList {
   /**
    * 正文内容的前100字
    */
-  @Column()
+  @Column({
+    type: 'text',
+  })
   content: string;
   /**
    * baae64
@@ -53,7 +55,16 @@ export class ArticlesList {
   /**
    * 时间戳
    */
-  @Column()
+  @Column({
+    transformer: {
+      to: (time: string) => {
+        return new Date(parseInt(time));
+      },
+      from: (time: Date) => {
+        return time.getTime().toString();
+      },
+    },
+  })
   time: Date;
   /**
    * 标题
