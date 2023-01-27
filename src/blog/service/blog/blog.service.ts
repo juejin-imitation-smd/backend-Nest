@@ -142,7 +142,7 @@ export class BlogService {
       return {
         code: HttpStatus.OK,
         msg: '查询成功',
-        data: top3Author,
+        data: { list: top3Author },
       };
     } catch (error) {
       return {

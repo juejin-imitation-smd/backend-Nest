@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateArticlesDto } from 'src/cms/dto/articles/create-article.dto';
+import { FindAllAtricleDto } from 'src/cms/dto/articles/find-article.dto';
 import { UpdateArticleDto } from 'src/cms/dto/articles/update-article.dto';
 import { ArticlesList } from 'src/typeorm/ArticlesList';
 import { Author } from 'src/typeorm/Author';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class ArticlesService {
@@ -15,10 +16,12 @@ export class ArticlesService {
     private readonly authorsRepository: Repository<Author>,
   ) {}
 
-  async findAll(page: number, size: number) {
+  async findAll(findAllAtricleDto: FindAllAtricleDto) {
+    const { page, size, title } = findAllAtricleDto;
     const [list, total] = await this.articlesRepository.findAndCount({
       skip: size * (page - 1),
       take: size,
+      where: { title: Like(`%${title}%`) },
       relations: ['author'],
     });
     (list as any).forEach(

@@ -1,4 +1,5 @@
-import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, ManyToOne } from 'typeorm';
+import { Author } from './Author';
 /**
  * 广告
  */
@@ -6,19 +7,37 @@ import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
 export class Advertisement {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  title: string;
+
   @Column()
   content: string;
+
   /**
    * base64
    */
   @Column({
-    type: "longblob",
+    type: 'longblob',
     transformer: {
       to: (value: string) => Buffer.from(value),
-      from: (value: Buffer) => value.toString()
-    }
+      from: (value: Buffer) => value.toString(),
+    },
   })
   image: string;
+
   @Column()
-  title: string;
+  time: Date;
+
+  @ManyToOne(() => Author, (author) => author.articles)
+  author: Author;
+
+  @Column()
+  view_count: number;
+
+  @Column()
+  like_count: number;
+
+  @Column()
+  comment_count: number;
 }
