@@ -26,7 +26,7 @@ export class AuthorsService {
       id: author.id,
     });
 
-    if (newAuthor) this.authorRepository.save(newAuthor);
+    if (newAuthor) return this.authorRepository.save(newAuthor);
     else return null;
   }
 
