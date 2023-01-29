@@ -13,6 +13,7 @@ import { Category } from './typeorm/Category';
 import { RouterList } from './typeorm/RouterList';
 import { UserModule } from './user/user.module';
 import { User } from './typeorm/User';
+import { PhotoModule } from './photo/photo.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { User } from './typeorm/User';
     BlogModule,
     CMSModule,
     UserModule,
+    PhotoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
