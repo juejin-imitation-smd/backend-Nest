@@ -15,6 +15,9 @@ import { CategoriesController } from './controllers/categories/categories.contro
 import { CategoriesService } from './services/categories/categories.service';
 import { Category } from 'src/typeorm/Category';
 import { Label } from 'src/typeorm/Label';
+import { RoutesController } from './controllers/routes/routes.controller';
+import { RoutesService } from './services/routes/routes.service';
+import { RouterList } from 'src/typeorm/RouterList';
 
 @Module({
   imports: [
@@ -24,6 +27,7 @@ import { Label } from 'src/typeorm/Label';
       ArticlesList,
       Category,
       Label,
+      RouterList,
     ]),
   ],
   controllers: [
@@ -32,6 +36,7 @@ import { Label } from 'src/typeorm/Label';
     ArticlesController,
     LabelsController,
     CategoriesController,
+    RoutesController,
   ],
   providers: [
     AuthorsService,
@@ -39,6 +44,7 @@ import { Label } from 'src/typeorm/Label';
     ArticlesService,
     LabelsService,
     CategoriesService,
+    RoutesService,
   ],
 })
 export class CMSModule {}
