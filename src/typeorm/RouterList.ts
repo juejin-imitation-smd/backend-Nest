@@ -6,7 +6,7 @@ import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
 @Entity({ name: 'router_list' })
 export class RouterList {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   url: string;
