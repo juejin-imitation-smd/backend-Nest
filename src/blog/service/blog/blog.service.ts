@@ -116,7 +116,7 @@ export class BlogService {
     }
   }
   // 查询广告
-  async findAdvertisementList(params: QueryAdvertisement) {
+  async findAdvertisementList(params?: QueryAdvertisement) {
     let advertisement: any = [];
 
     try {
