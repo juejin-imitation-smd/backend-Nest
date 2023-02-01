@@ -8,6 +8,7 @@ import { Author } from 'src/typeorm/Author';
 import { Category } from 'src/typeorm/Category';
 import { QueryArticle } from 'src/blog/dtos/QueryArticle.dto';
 import { RouterList } from 'src/typeorm/RouterList';
+import { QueryAdvertisement } from 'src/blog/dtos/QueryAdvertisement';
 
 @Injectable()
 export class BlogService {
@@ -73,14 +74,14 @@ export class BlogService {
         case 'all':
           break;
         default:
-          query = query.where('article.label = :label', { label });
+          query = query.andWhere('article.label = :label', { label });
           break;
       }
       switch (subtab) {
         case 'all':
           break;
         default:
-          query = query.where('article.sub_tabs like :sub_tabs', {
+          query = query.andWhere('article.sub_tabs like :sub_tabs', {
             sub_tabs: `%${subtab}%`,
           });
 
@@ -115,15 +116,25 @@ export class BlogService {
     }
   }
   // 查询广告
-  async findAdvertisementList() {
+  async findAdvertisementList(params: QueryAdvertisement) {
+    let advertisement: any = [];
+
     try {
-      const advertisementList = await this.advertisementService.find({
-        relations: ['author'],
-      });
+      if (params.id) {
+        advertisement = await this.advertisementService.findOne({
+          where: { id: params.id },
+          relations: ['author'],
+        });
+      } else {
+        advertisement = await this.advertisementService.find({
+          relations: ['author'],
+        });
+      }
+
       return {
         code: HttpStatus.OK,
         msg: '查询成功',
-        data: advertisementList,
+        data: advertisement,
       };
     } catch (error) {
       return {

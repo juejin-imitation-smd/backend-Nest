@@ -1,6 +1,7 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/AuthGuard';
+import { QueryAdvertisement } from 'src/blog/dtos/QueryAdvertisement';
 import { QueryArticle } from 'src/blog/dtos/QueryArticle.dto';
 import { QueryArticlesList } from 'src/blog/dtos/QueryArticlesList.dto';
 import { BlogService } from 'src/blog/service/blog/blog.service';
@@ -21,8 +22,9 @@ export class BlogController {
   }
   // 广告
   @Get('advertisements')
-  findAdvertisementList() {
-    return this.blogService.findAdvertisementList();
+  @ApiQuery({ name: 'id', type: Number,required: false })
+  findAdvertisementList(@Query() queryAdvertisement: QueryAdvertisement) {
+    return this.blogService.findAdvertisementList(queryAdvertisement);
   }
 
   // TOP3作者
@@ -37,12 +39,13 @@ export class BlogController {
     return this.blogService.findCategory();
   }
 
-  //获取所有类别，以及每类中标签
+  //获取指定文章
   @Get('article')
   @ApiQuery({ name: 'id', type: Number, required: true })
   getArticle(@Query() queryArticleParams: QueryArticle) {
     return this.blogService.findOneArticle(queryArticleParams);
   }
+
 
   //获取路由列表
   @Get('getroutes')
