@@ -22,8 +22,14 @@ export class BlogController {
   }
   // 广告
   @Get('advertisements')
-  @ApiQuery({ name: 'id', type: Number,required: false })
-  findAdvertisementList(@Query() queryAdvertisement: QueryAdvertisement) {
+  findAdvertisementList() {
+    return this.blogService.findAdvertisementList();
+  }
+
+  // 获取指定广告
+  @Get('advertisement')
+  @ApiQuery({ name: 'id', type: Number, required: false })
+  findAdvertisement(@Query() queryAdvertisement: QueryAdvertisement) {
     return this.blogService.findAdvertisementList(queryAdvertisement);
   }
 
@@ -45,7 +51,6 @@ export class BlogController {
   getArticle(@Query() queryArticleParams: QueryArticle) {
     return this.blogService.findOneArticle(queryArticleParams);
   }
-
 
   //获取路由列表
   @Get('getroutes')
