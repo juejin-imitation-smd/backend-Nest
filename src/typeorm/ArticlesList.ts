@@ -30,6 +30,10 @@ export class ArticlesList {
     type: 'text',
   })
   content: string;
+
+  @Column()
+  theme: string;
+
   /**
    * baae64
    */

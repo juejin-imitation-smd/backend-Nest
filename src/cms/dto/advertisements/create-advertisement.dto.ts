@@ -1,6 +1,7 @@
 export class CreateAdvertisementDto {
   title: string;
   content: string;
+  theme: string;
   image: string;
   time: string;
   view_count: number;
