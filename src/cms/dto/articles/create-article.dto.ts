@@ -2,6 +2,7 @@ export class CreateArticlesDto {
   title: string;
   time: string;
   label: string;
+  theme: string;
   sub_tabs: string[];
   content: string;
   image: string;

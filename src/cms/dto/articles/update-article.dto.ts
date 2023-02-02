@@ -2,6 +2,7 @@ export class UpdateArticleDto {
   title: string;
   time: string;
   label: string;
+  theme: string;
   content: string;
   image: string;
   author_id: number;

@@ -2,6 +2,7 @@ export class UpdateAdvertisementDto {
   id: number;
   title: string;
   content: string;
+  theme: string;
   image: string;
   time: string;
   view_count: number;

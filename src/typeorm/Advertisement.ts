@@ -16,6 +16,9 @@ export class Advertisement {
   })
   content: string;
 
+  @Column()
+  theme: string;
+
   /**
    * base64
    */
