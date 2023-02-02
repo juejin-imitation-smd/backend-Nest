@@ -30,6 +30,7 @@ export class BlogService {
 
     try {
       let query = this.articlesListService.createQueryBuilder('article');
+
       switch (type) {
         case 'newest':
           query = query.orderBy('article.time', 'DESC');
@@ -65,13 +66,19 @@ export class BlogService {
           query = query.orderBy('article.like_count', 'DESC');
       }
 
-      if (label) {
-        query = query.andWhere('article.label = :label', { label });
-      }
-
       if (subtab) {
         query = query.andWhere('article.sub_tabs like :sub_tabs', {
           sub_tabs: `%${subtab}%`,
+        });
+      }
+      // 转换lablel
+      if (label && label !== 'recommended') {
+        const tranCategory = await this.categoryService
+          .createQueryBuilder('category')
+          .where('category.url = :url', { url: label })
+          .getOne();
+        await query.andWhere('article.label = :label', {
+          label: tranCategory?.name,
         });
       }
 
@@ -108,7 +115,7 @@ export class BlogService {
     let advertisement: any = [];
 
     try {
-      if (params.id) {
+      if (params) {
         advertisement = await this.advertisementService.findOne({
           where: { id: params.id },
           relations: ['author'],
