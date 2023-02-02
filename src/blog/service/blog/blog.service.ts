@@ -26,16 +26,11 @@ export class BlogService {
   ) {}
   // 文章列表
   async findArticlesList(articles: QueryArticlesList) {
-    const {
-      label = 'all',
-      subtab = 'all',
-      type = 'recommend',
-      page = 1,
-      size = 20,
-    } = articles;
+    const { label, subtab, type = 'recommend', page = 1, size = 20 } = articles;
 
     try {
       let query = this.articlesListService.createQueryBuilder('article');
+
       switch (type) {
         case 'newest':
           query = query.orderBy('article.time', 'DESC');
@@ -45,23 +40,24 @@ export class BlogService {
           break;
         case 'recommend':
           query = query.orderBy('article.like_count', 'DESC');
+          break;
         case 'three_days_hottest':
           query = query
-            .where('article.time >= :time', {
+            .andWhere('article.time >= :time', {
               time: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
             })
             .orderBy('article.view_count', 'DESC');
           break;
         case 'weekly_hottest':
           query = query
-            .where('article.time >= :time', {
+            .andWhere('article.time >= :time', {
               time: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
             })
             .orderBy('article.view_count', 'DESC');
           break;
         case 'monthly_hottest':
           query = query
-            .where('article.time >= :time', {
+            .andWhere('article.time >= :time', {
               time: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
             })
             .orderBy('article.view_count', 'DESC');
@@ -70,23 +66,22 @@ export class BlogService {
           query = query.orderBy('article.like_count', 'DESC');
       }
 
-      switch (label) {
-        case 'all':
-          break;
-        default:
-          query = query.andWhere('article.label = :label', { label });
-          break;
+      if (subtab) {
+        query = query.andWhere('article.sub_tabs like :sub_tabs', {
+          sub_tabs: `%${subtab}%`,
+        });
       }
-      switch (subtab) {
-        case 'all':
-          break;
-        default:
-          query = query.andWhere('article.sub_tabs like :sub_tabs', {
-            sub_tabs: `%${subtab}%`,
-          });
+      // 转换lablel
+      if (label && label !== 'recommended') {
+        const tranCategory = await this.categoryService
+          .createQueryBuilder('category')
+          .where('category.url = :url', { url: label })
+          .getOne();
+        await query.andWhere('article.label = :label', {
+          label: tranCategory?.name,
+        });
+      }
 
-          break;
-      }
       const [articles, total] = await query
         .leftJoinAndSelect('article.author', 'author')
         .skip((page - 1) * size)
@@ -120,7 +115,7 @@ export class BlogService {
     let advertisement: any = [];
 
     try {
-      if (params.id) {
+      if (params) {
         advertisement = await this.advertisementService.findOne({
           where: { id: params.id },
           relations: ['author'],
