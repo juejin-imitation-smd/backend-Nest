@@ -26,13 +26,7 @@ export class BlogService {
   ) {}
   // 文章列表
   async findArticlesList(articles: QueryArticlesList) {
-    const {
-      label = 'all',
-      subtab = 'all',
-      type = 'recommend',
-      page = 1,
-      size = 20,
-    } = articles;
+    const { label, subtab, type = 'recommend', page = 1, size = 20 } = articles;
 
     try {
       let query = this.articlesListService.createQueryBuilder('article');
@@ -71,22 +65,14 @@ export class BlogService {
           query = query.orderBy('article.like_count', 'DESC');
       }
 
-      switch (label) {
-        case 'all':
-          break;
-        default:
-          query = query.andWhere('article.label = :label', { label });
-          break;
+      if (label) {
+        query = query.andWhere('article.label = :label', { label });
       }
-      switch (subtab) {
-        case 'all':
-          break;
-        default:
-          query = query.andWhere('article.sub_tabs like :sub_tabs', {
-            sub_tabs: `%${subtab}%`,
-          });
 
-          break;
+      if (subtab) {
+        query = query.andWhere('article.sub_tabs like :sub_tabs', {
+          sub_tabs: `%${subtab}%`,
+        });
       }
 
       const [articles, total] = await query
@@ -94,6 +80,7 @@ export class BlogService {
         .skip((page - 1) * size)
         .take(size)
         .getManyAndCount();
+      console.log(111111, page);
 
       articles.forEach((item) => {
         (item.sub_tabs as any) = item.sub_tabs
