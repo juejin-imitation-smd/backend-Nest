@@ -45,23 +45,24 @@ export class BlogService {
           break;
         case 'recommend':
           query = query.orderBy('article.like_count', 'DESC');
+          break;
         case 'three_days_hottest':
           query = query
-            .where('article.time >= :time', {
+            .andWhere('article.time >= :time', {
               time: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
             })
             .orderBy('article.view_count', 'DESC');
           break;
         case 'weekly_hottest':
           query = query
-            .where('article.time >= :time', {
+            .andWhere('article.time >= :time', {
               time: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
             })
             .orderBy('article.view_count', 'DESC');
           break;
         case 'monthly_hottest':
           query = query
-            .where('article.time >= :time', {
+            .andWhere('article.time >= :time', {
               time: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
             })
             .orderBy('article.view_count', 'DESC');
@@ -87,6 +88,7 @@ export class BlogService {
 
           break;
       }
+
       const [articles, total] = await query
         .leftJoinAndSelect('article.author', 'author')
         .skip((page - 1) * size)

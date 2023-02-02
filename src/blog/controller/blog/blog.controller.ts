@@ -14,9 +14,9 @@ export class BlogController {
   @Get('getArticles')
   @ApiQuery({ name: 'size', type: Number, required: true })
   @ApiQuery({ name: 'page', type: Number, required: true })
-  @ApiQuery({ name: 'subtab', type: String })
-  @ApiQuery({ name: 'label', type: String })
-  @ApiQuery({ name: 'type', type: String })
+  @ApiQuery({ name: 'subtab', type: String, required: false })
+  @ApiQuery({ name: 'label', type: String, required: false })
+  @ApiQuery({ name: 'type', type: String, required: false })
   findArticlesList(@Query() queryListParams: QueryArticlesList) {
     return this.blogService.findArticlesList(queryListParams);
   }
