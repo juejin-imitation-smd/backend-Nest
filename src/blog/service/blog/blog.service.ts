@@ -80,7 +80,6 @@ export class BlogService {
         .skip((page - 1) * size)
         .take(size)
         .getManyAndCount();
-      console.log(111111, page);
 
       articles.forEach((item) => {
         (item.sub_tabs as any) = item.sub_tabs
